@@ -18,6 +18,7 @@ class User(UserMixin,db.Model):
     email = db.Column(db.String(64),unique=True,nullable=False,index=True)
     username = db.Column(db.String(64),nullable=False)
     password_hash = db.Column(db.String(128),nullable=False)
+    comfirmed = db.Column(db.Boolean,default=False)
     avatar_hash = db.Column(db.String(32),default='')
 
     @staticmethod
@@ -47,3 +48,21 @@ class User(UserMixin,db.Model):
         hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url,hash=hash,size=size,default=default,rating=rating)
+
+    @staticmethod
+    def generate_fake(count=100):
+        from sqlalchemy.exc import IntegrityError
+        from random import seed
+        import forgery_py
+
+        seed()
+        for i in range(count):
+            u = User(email=forgery_py.internet.email_address(),
+                     username=forgery_py.internet.user_name(True),
+                     password=forgery_py.lorem_ipsum.word(),
+                     comfirmed=True)
+            db.session.add(u)
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()

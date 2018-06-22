@@ -23,4 +23,16 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    @app.before_request
+    def before_request():
+        pass
+
+    @app.before_first_request
+    def before_first_request():
+        pass
+
+    @app.teardown_request
+    def teardown_request():
+        pass
+
     return app
