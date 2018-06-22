@@ -1,6 +1,7 @@
 #!usr/bin/env python
 # -*- encoding:utf-8 -*-
 from .. import db
+from .articleTypeSetting import ArticleTypeSetting
 
 class ArticleType(db.Model):
     __tablename__ = 'articleTypes'
@@ -27,4 +28,6 @@ class ArticleType(db.Model):
             articleType = ArticleType(name=name,
                                        setting=ArticleTypeSetting(name=name))
             db.session.add(articleType)
-        db.session.commit()
+
+            db.session.commit()
+

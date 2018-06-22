@@ -16,8 +16,8 @@ class Menu(db.Model):
 
     @staticmethod
     def insert_menu():
-        menus = [u'web开发',u'数据库',u'网络技术',u'爱生活，爱自己',u'Linux世界',u'开发语言']
-        for menu in menus:
+        menus = ['web开发','数据库','网络技术','爱生活，爱自己','Linux世界','开发语言']
+        for name in menus:
             menu = Menu(name=name)
             db.session.add(menu)
             db.session.commit()

@@ -4,12 +4,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
 from config import Config
 
 db = SQLAlchemy()
 moment = Moment()
 login_manager = LoginManager()
 config = Config()
+bootstrap = Bootstrap()
 
 def create_app():
     app = Flask(__name__,instance_relative_config=True)
@@ -17,6 +19,7 @@ def create_app():
     db.init_app(app)
     moment.init_app(app)
     login_manager.init_app(app)
+    bootstrap.init_app(app)
     # print(app.config)
 
     # 注册蓝图
@@ -31,8 +34,8 @@ def create_app():
     def before_first_request():
         pass
 
-    @app.teardown_request
-    def teardown_request():
-        pass
-
+    # @app.teardown_request
+    # def teardown_request():
+    #     pass
+    print(app.config)
     return app

@@ -2,6 +2,8 @@
 # -*- encoding:utf-8 -*-
 from datetime import datetime
 from .. import db
+from .articleType import ArticleType
+from .source import Source
 
 class Article(db.Model):
     __tablename__ = 'articles'
@@ -35,10 +37,10 @@ class Article(db.Model):
             aT = ArticleType.query.offset(randint(0,articleType_count-1)).first()
             s = Source.query.offset(randint(0,source_count-1)).first()
             a = Article(title=forgery_py.lorem_ipsum.title(randint(3,5)),
-                        content=forgery_py.lorem_ipsum.sentence(randint(15,35)),
-                        summary=forgery_py.lorem_ipsum.sentence(randint(2,5)),
+                        content=forgery_py.lorem_ipsum.sentences(randint(15,35)),
+                        summary=forgery_py.lorem_ipsum.sentences(randint(2,5)),
                         num_of_view=randint(100,15000),
-                        articleType=aT,sourceo=s)
+                        articleType=aT,source=s)
             db.session.add(a)
             try:
                 db.session.commit()

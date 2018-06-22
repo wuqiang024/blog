@@ -6,7 +6,13 @@ from flask_migrate import Migrate,MigrateCommand
 from app.models import *
 
 def make_shell_context():
-    return dict(db=db,User=User)
+    return dict(db=db,
+                User=User,
+                Menu=Menu,
+                Article=Article,
+                ArticleTypeSetting=ArticleTypeSetting,
+                ArticleType=ArticleType,
+                Source=Source)
 
 app = create_app()
 manager = Manager(app)
