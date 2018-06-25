@@ -1,0 +1,42 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}
+登录mini_blog后台管理系统
+{% endblock %}
+
+{% block content %}
+    <div class="container login-page">
+        <div class="row">
+            <h3 class="text-center">欢迎登录管理后台</h3>
+            <form class="form-horizontal" role="form" method="post" action="{{ url_for('auth.login') }}">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.email.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                            {{ form.email(class='form-control',placeholder='请输入您的邮件地址',required='') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </span>
+                            {{ form.password(class='form-control',placeholder='请输入您的密码',required='') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-default">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

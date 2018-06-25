@@ -1,0 +1,45 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="navbar">
+        {% if current_user.is_authenticated %}
+        {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">logout</a>
+        {% else %}
+        stranger
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-2 entry-box" style="background-color:">
+            <ul class="nav nav-list">
+                <li class="nav-header">博文管理</li>
+                <li><a href="#">发表文章</a> </li>
+                <li><a href="#">管理文章</a> </li>
+                <li><a href="#">文章分类</a> </li>
+                <li class="nav-header">评论管理</li>
+                <li><a href="#">文章评论</a> </li>
+                <li class="nav-header">博客定制</li>
+                <li><a href="">基本信息</a> </li>
+                <li><a href="">插件管理</a> </li>
+                <li><a href="">添加插件</a> </li>
+                <li class="nav-header">其他管理</li>
+                <li><a href="#">用户账户</a> </li>
+                <li><a href="#">帮助</a> </li>
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            {% for category,message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{category}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    &times;
+                </button>{{ message }}
+            </div>
+            {% endfor %}
+
+            {% block admin_content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

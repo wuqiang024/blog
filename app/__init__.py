@@ -1,6 +1,6 @@
 #!usr/bin/env python
 # -*- encoding:utf-8 -*-
-from flask import Flask
+from flask import Flask,g
 from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from flask_login import LoginManager
@@ -25,6 +25,12 @@ def create_app():
     # 注册蓝图
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint,url_prefix='/auth')
+
+    from .admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint,url_prefix='/admin')
 
     @app.before_request
     def before_request():

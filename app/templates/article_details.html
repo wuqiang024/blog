@@ -1,0 +1,15 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    Blog_mini-{{ article.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% include '_article_info.html' %}
+        <hr>
+        <p>
+            {{ article.content | safe }}
+        </p>
+    </div>
+{% endblock %}
