@@ -4,8 +4,20 @@ from flask import render_template,redirect,request,url_for,flash
 from flask_login import login_required,logout_user,login_user,current_user
 from . import auth
 from .. import admin
-from .forms import LoginForm
+from .forms import LoginForm,RegisterForm
 from ..models import User
+
+@auth.route('/register',methods=['GET','POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data.strip(),
+                    email=form.email.data.strip(),
+                    password=form.password.data.strip())
+        db.session.add(user)
+        db.session.commit()
+        token = user.generate_confirmation_token()
+    return render_template('auth/register.html',form=form)
 
 @auth.route('/login',methods=['GET','POST'])
 def login():

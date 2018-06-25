@@ -21,6 +21,10 @@ class User(UserMixin,db.Model):
     comfirmed = db.Column(db.Boolean,default=False)
     avatar_hash = db.Column(db.String(32),default='')
 
+    def generate_confirmation_token(self,expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'],expires_in=expiration)
+        return s.dumps({'comfirm':self.id})
+
     @staticmethod
     def insert_admin(email,username,password):
         user = User(email=email,username=username,password=password)

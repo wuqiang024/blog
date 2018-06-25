@@ -7,4 +7,6 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SECRET_KEY = 'blog'
     PER_PAGE = 10
+    FLASK_EMAIL_SENDER: '253071452@qq.com'
+    FLASK_EMAIL_PWD:'zxmegzggvfvnbggh'
 
