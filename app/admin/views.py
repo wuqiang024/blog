@@ -3,7 +3,7 @@
 from flask import render_template,url_for,redirect,request,current_app,jsonify,flash
 from flask_login import login_required,current_user
 from . import admin
-from .forms import SubmitArticlesForm
+from .forms import SubmitArticlesForm,DeleteArticleForm,DeleteArticlesForm,ManageArticlesForm
 from ..models import Article,Source,ArticleType
 from .. import db
 
@@ -114,3 +114,64 @@ def manage_articleTypes_nav():
     return render_template('admin/manage_articleTypes_nav.html',menus=menus,
                            pagination=pagination,endpoint='.manage_articleTypes_nav',
                            page=page,form=form,form2=form2,form3=form3)
+
+@admin.route('/manage-articles',methods=['POST','GET'])
+@login_required
+def manage_articles():
+    types_id = request.args.get('types_id',-1,type=int)
+    source_id = request.args.get('source_id',-1,type=int)
+    form = ManageArticlesForm(request.form,types=types_id,source=source_id)
+    form2 = DeleteArticleForm() # 删除一篇文章
+    form3 = DeleteArticlesForm() # 删除多篇文章
+
+    types = [(t.id,t.name) for t in ArticleType.query.all()]
+    types.append((-1,u'全部分类'))
+    form.types.choices = types
+    sources = [(s.id,s.name) for s in Source.query.all()]
+    sources.append((-1,u'全部来源'))
+    form.source.choices = sources
+
+    pagination_search = 0
+
+    if form.validate_on_submit() or (
+            request.args.get('types_id') is not None and request.args.get('source_id') is not None):
+        if form.validate_on_submit():
+            types_id = form.types.data
+            source_id = form.source.data
+            page = 1
+        else:
+            types_id = request.args.get('types_id',type=int)
+            source_id = request.args.get('source_id',type=int)
+            form.types.data = types_id
+            form.source.data = source_id
+            page = request.args.get('page',1,type=int)
+
+        result = Article.query.order_by(Article.create_time.desc())
+
+        if types_id != -1:
+            articleType = ArticleType.query.get_or_404(types_id)
+            result = result.filter_by(articleType=articleType)
+
+        if source_id != -1:
+            source = Source.query.get_or_404(source_id)
+            result = result.filter_by(source=source)
+
+        pagination_search = result.paginate(page,per_page=current_app.config['PER_PAGE'],error_out=False)
+
+        if pagination_search !=0:
+            pagination = pagination_search
+            articles = pagination_search.items
+        else:
+            page = request.args.get('page',1,type=int)
+            pagination = Article.query.order_by(Article.create_time.desc()).paginate(
+                page,per_page=current_app.config['PER_PAGE'],error_out=False)
+            articles = pagination.items
+
+        return render_template('admin/manage_articles.html',Article=Article,
+                               articles=articles,pagination=pagination,endpoint='admin.manage_articles',
+                               form=form,form2=form2,form3=form3,
+                               types_id=types_id,source_id=source_id,page=page)
+
+
+
+    return render_template('admin/manage_articles.html')

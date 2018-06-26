@@ -1,7 +1,8 @@
 #!usr/bin/env python
 # -*- encoding:utf-8 -*-
-
+from flask import current_app
 import hashlib
+from itsdangerous import JSONWebSignatureSerializer as Serializer
 from datetime import datetime
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
@@ -21,8 +22,8 @@ class User(UserMixin,db.Model):
     comfirmed = db.Column(db.Boolean,default=False)
     avatar_hash = db.Column(db.String(32),default='')
 
-    def generate_confirmation_token(self,expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'],expires_in=expiration)
+    def generate_confirmation_token(self,expiration):
+        s = Serializer(current_app.config['SECRET_KEY'],int(expiration))
         return s.dumps({'comfirm':self.id})
 
     @staticmethod

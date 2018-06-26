@@ -3,7 +3,7 @@
 from flask import render_template,redirect,request,url_for,flash
 from flask_login import login_required,logout_user,login_user,current_user
 from . import auth
-from .. import admin
+from .. import admin,db
 from .forms import LoginForm,RegisterForm
 from ..models import User
 
@@ -11,12 +11,18 @@ from ..models import User
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data.strip(),
-                    email=form.email.data.strip(),
+        user = User(email=form.email.data.strip(),
+                    username=form.username.data.strip(),
                     password=form.password.data.strip())
         db.session.add(user)
-        db.session.commit()
-        token = user.generate_confirmation_token()
+        try:
+            db.session.commit()
+            flash('注册成功')
+        except e:
+            db.session.rollback()
+            flash('注册失败')
+        return redirect(url_for('auth.login'))
+
     return render_template('auth/register.html',form=form)
 
 @auth.route('/login',methods=['GET','POST'])
@@ -29,7 +35,7 @@ def login():
         if user is not None and user.check_password(form.password.data):
             login_user(user)
             flash(u'登录成功!欢迎回来,%s' % user.username,'success')
-            return redirect(request.args.get('next') or url_for('main.index'))
+            return redirect(request.args.get('next') or url_for('admin.manager'))
         else:
             flash(u'登录失败！用户名或密码错误，请重新登录','danger')
 

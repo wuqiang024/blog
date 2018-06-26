@@ -16,3 +16,13 @@ class AddArticleTypeForm(FlaskForm):
 
 class AddArticleTypeNavForm(FlaskForm):
     name = StringField(u'导航名称',validators=[DataRequired()])
+
+class ManageArticlesForm(FlaskForm):
+    source = SelectField(u'来源',coerce=int,validators=[DataRequired()])
+    types = SelectField(u'类型',coerce=int,validators=[DataRequired()])
+
+class DeleteArticleForm(FlaskForm):
+    articleId = StringField(validators=[DataRequired()])
+
+class DeleteArticlesForm(FlaskForm):
+    articleIds = StringField(validators=[DataRequired()])

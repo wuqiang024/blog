@@ -7,6 +7,17 @@
     <div class="container login-page">
         <div class="row">
             <h3 class="text-center">欢迎登录管理后台</h3>
+
+
+            {% for category,message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{category}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    &times;
+                </button>{{ message }}
+            </div>
+            {% endfor %}
+
+
             <form class="form-horizontal" role="form" method="post" action="{{ url_for('auth.login') }}">
                 {{ form.csrf_token }}
                 <div class="form-group">

@@ -10,6 +10,8 @@ from config import Config
 db = SQLAlchemy()
 moment = Moment()
 login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'auth.login'
 config = Config()
 bootstrap = Bootstrap()
 
