@@ -4,7 +4,9 @@ from flask import Flask,g
 from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from flask_login import LoginManager
+from flask_mail import Mail
 from flask_bootstrap import Bootstrap
+from flask_cache import Cache
 from config import Config
 
 db = SQLAlchemy()
@@ -13,6 +15,8 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 config = Config()
+mail = Mail()
+cache = Cache()
 bootstrap = Bootstrap()
 
 def create_app():
@@ -22,6 +26,8 @@ def create_app():
     moment.init_app(app)
     login_manager.init_app(app)
     bootstrap.init_app(app)
+    mail.init_app(app)
+    cache.init_app(app,config={'CACHE_TYPE': 'simple'})
     # print(app.config)
 
     # 注册蓝图
@@ -45,5 +51,4 @@ def create_app():
     # @app.teardown_request
     # def teardown_request():
     #     pass
-    print(app.config)
     return app

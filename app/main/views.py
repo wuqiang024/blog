@@ -1,12 +1,16 @@
 #!usr/bin/env python
 # -*- encoding:utf-8 -*-
-from flask import render_template,request,current_app
+import os
+import random
+from flask import render_template,request,current_app,make_response,url_for
 from flask_login import current_user
+import datetime
 from ..models import Article,ArticleType,Source
 from . import main
-from .. import db
+from .. import db,cache
 
 @main.route('/index')
+@cache.cached(timeout=60)
 def index():
     page = request.args.get('page', 1,type=int)
     pagination = Article.query.order_by(Article.create_time.desc()).paginate(
@@ -25,6 +29,7 @@ def articleTypes(id):
     return render_template('index.html',articles=articles,pagination=pagination,endpoint='.articleTypes',id=id)
 
 @main.route('/article-details/<int:id>',methods=['GET','POST'])
+@cache.cached(timeout=60)
 def articleDetails(id):
     article = Article.query.get_or_404(id)
     # article.add_view(article,db)
@@ -50,8 +55,9 @@ def gen_rnd_filename():
     return '%s%s' % (filename_prefix, str(random.randrange(1000, 10000)))
 
 
-@main.route('/ckupload/', methods=['POST'])
+@main.route('/ckupload/', methods=['POST', 'OPTIONS'])
 def ckupload():
+    print(current_app.static_folder)
     """CKEditor file upload"""
     error = ''
     url = ''
@@ -75,12 +81,9 @@ def ckupload():
             url = url_for('static', filename='%s/%s' % ('upload', rnd_name))
     else:
         error = 'post error'
-    res = """
-
-<script type="text/javascript">
-  window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
-</script>
-""" % (callback, url, error)
+    res = """<script type="text/javascript">
+    window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
+    </script>""" % (callback, url, error)
     response = make_response(res)
     response.headers["Content-Type"] = "text/html"
     return response

@@ -1,4 +1,5 @@
 {% extends 'admin/admin_base.html' %}
+{% import '_macros.html' as macros %}
 
 {% block title %}
 管理文章
@@ -39,7 +40,7 @@
 
     <div class="col-sm-12">
         <form class="delete-articles" id="delArticlesForm" method="post"
-        action="{{ url_for('admin.delete_articles',types_id=types_id,source_id=source_id,page=page) }}">
+        action="#">
             {{ form3.csrf_token }}
             {{ form3.articleIds(type='hidden',value='') }}
 
@@ -63,12 +64,14 @@
                     <td>{{ article.source.name }}</td>
                     <td>{{ article.articleType.name }}</td>
                     <td>{{ moment(article.create_time.replace(microsecond=0)).format('LLL') }}</td>
-                    <td><a href="#"><span class="glyphicon glyphicon-pencil" title="编辑"></span> </a> </td>
+                    <td>
+                        <a href="{{ url_for('admin.editArticles',id=article.id) }}">
+                            <span class="glyphicon glyphicon-pencil" title="编辑"></span>
+                        </a>
+                    </td>
                     <td>
                         <form id="delForm{{article.id}}" method="post"
-                              action="{{ url_for('admin.delete_article',types_id=types_id,source_id=source_id,
-                              page=page) }}
-                    ">   {{ form2.csrf_token }}
+                              action="#">   {{ form2.csrf_token }}
                             {{ form2.articleId(type='hidden',value=article.id) }}
                             <a href="#"><span class="glyphicon glyphicon-trash" title="删除"></span> </a>
                         </form>
@@ -78,6 +81,10 @@
                 </tbody>
             </table>
         </form>
+    </div>
+
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination,endpoint,types_id=types_id,source_id=source_id) }}
     </div>
 </div>
 {% endblock %}

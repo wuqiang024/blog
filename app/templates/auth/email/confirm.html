@@ -1,0 +1,5 @@
+<p>Dear {{ user.username }}</p>
+<p>welcome to flask</p>
+<p>to comfirm your account pelease <a href="{{ url_for('auth.confirm',token=token,_external=True) }}">
+    click here
+</a> </p>

@@ -6,6 +6,7 @@ from . import auth
 from .. import admin,db
 from .forms import LoginForm,RegisterForm
 from ..models import User
+from ..utils.email import send_mail
 
 @auth.route('/register',methods=['GET','POST'])
 def register():
@@ -15,12 +16,10 @@ def register():
                     username=form.username.data.strip(),
                     password=form.password.data.strip())
         db.session.add(user)
-        try:
-            db.session.commit()
-            flash('注册成功')
-        except e:
-            db.session.rollback()
-            flash('注册失败')
+        db.session.commit()
+        token = user.generate_confirmation_token()
+        flash('注册邮件已成功发送到您的邮箱，请激活！')
+        send_mail(user.email,'确认激活您的账号','auth/email/confirm',user=user,token=token)
         return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html',form=form)
@@ -49,4 +48,16 @@ def login():
 def logout():
     logout_user()
     flash(u'你已退出登录','success')
+    return redirect(url_for('main.index'))
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm(token):
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    else:
+        flash('token已失效')
     return redirect(url_for('main.index'))

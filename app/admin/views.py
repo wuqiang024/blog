@@ -2,6 +2,7 @@
 # -*- encoding:utf-8 -*-
 from flask import render_template,url_for,redirect,request,current_app,jsonify,flash
 from flask_login import login_required,current_user
+from datetime import datetime
 from . import admin
 from .forms import SubmitArticlesForm,DeleteArticleForm,DeleteArticlesForm,ManageArticlesForm
 from ..models import Article,Source,ArticleType
@@ -32,8 +33,6 @@ def submitArticles():
 
         source = Source.query.get(source_id)
         articleType = ArticleType.query.get(type_id)
-
-        print('success1')
 
         if source and articleType:
             article = Article(title=title,content=content,summary=summary,source=source,articleType=articleType)
@@ -158,20 +157,61 @@ def manage_articles():
 
         pagination_search = result.paginate(page,per_page=current_app.config['PER_PAGE'],error_out=False)
 
-        if pagination_search !=0:
-            pagination = pagination_search
-            articles = pagination_search.items
+    if pagination_search !=0:
+        pagination = pagination_search
+        articles = pagination_search.items
+    else:
+        page = request.args.get('page',1,type=int)
+        pagination = Article.query.order_by(Article.create_time.desc()).paginate(
+            page,per_page=current_app.config['PER_PAGE'],error_out=False)
+        articles = pagination.items
+
+    return render_template('admin/manage_articles.html',Article=Article,
+                           articles=articles,pagination=pagination,endpoint='admin.manage_articles',
+                           form=form,form2=form2,form3=form3,
+                           types_id=types_id,source_id=source_id,page=page)
+
+@admin.route('/manage-articleTypes',methods=['POST','GET'])
+@login_required
+def manage_articleTypes():
+    form = AddArticleTypeForm(menus=-1)
+    form2 = EditArticleTypeForm()
+
+    menus = Menu.return_menus()
+    return_setting_hide = ArticleTypeSetting.return_setting_hide()
+    form.menus.choices = menus
+    form.setting_hide.choices = return_setting_hide
+    form2.menus.choices = menus
+    form2.setting_hide.choices = return_setting_hide
+    page = request.args.get(page,1,type=int)
+
+    if form.validate_on_submit():
+        name = form.name.data
+        articleType = ArticleType.query.filter_by(name=name).first()
+        if articleType:
+            flash(u'添加分类失败！该分类名称已经存在','danger')
         else:
-            page = request.args.get('page',1,type=int)
-            pagination = Article.query.order_by(Article.create_time.desc()).paginate(
-                page,per_page=current_app.config['PER_PAGE'],error_out=False)
-            articles = pagination.items
+            introduction = form.introduction.data
+            setting_hide = form.setting_hide.data
+            menu = Menu.query.get(form.menus.data)
+            if not menu:
+                menu = None
+            articleType = ArticleType(name=name,introduction=introduction,menu=menu,
+                                      setting=ArticleTypeSetting(name=name))
+            if setting_hide == 1:
+                articleType.setting.hide = True
+            if setting_hide == 2:
+                articleType.setting.hide = False
+            db.session.add(articleType)
+            db.session.commit()
+            flash(u'添加分类成功','success')
+    if form.errors:
+        flash(u'添加分类失败！请查看填写有无错误。','danger')
+        return redirect(url_for('.manage_articleTypes'))
 
-        return render_template('admin/manage_articles.html',Article=Article,
-                               articles=articles,pagination=pagination,endpoint='admin.manage_articles',
-                               form=form,form2=form2,form3=form3,
-                               types_id=types_id,source_id=source_id,page=page)
-
-
-
-    return render_template('admin/manage_articles.html')
+    pagination = ArticleType.query.order_by(ArticleType.id.desc()).paginate(
+        page,per_page=current_app.config['PER_PAGE'],error_out=False)
+    articleTypes = pagination.items
+    return render_template('admin/manage_articleTypes.html',articleTypes=articleTypes,
+                           pagination=pagination,endpoint='.manage_articleTypes',form=form,form2=form2,
+                           page=page)

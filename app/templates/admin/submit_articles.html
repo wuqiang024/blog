@@ -4,6 +4,11 @@
 Blog_mini-发表文章
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <script src="//cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
+{% endblock %}
+
 {% block admin_content %}
 <div class="entry-box submit-article">
     <h4><strong>发表文章</strong></h4>
@@ -16,7 +21,7 @@ Blog_mini-发表文章
             {{ form.title(class='submit-article-title') }}(1-50字)
         </div>
         <div class="form-group">
-            {{ form.content(class="ckeditor") }}
+            {{ form.content(class="ckeditor",id="content") }}
         </div>
         <div class="form-group">
             {{ form.types.label(class="control-label") }}
@@ -30,5 +35,10 @@ Blog_mini-发表文章
             <button type="submit" class="btn btn-success">提交</button>
         </div>
     </form>
+    <script type="text/javascript">
+        CKEDITOR.replace('content', {
+            filebrowserUploadUrl: '/ckupload/',
+        });
+    </script>
 </div>
 {% endblock %}

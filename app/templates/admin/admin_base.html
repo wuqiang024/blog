@@ -1,8 +1,7 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block head %}
-    {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -18,9 +17,9 @@
         <div class="col-md-2 entry-box" style="background-color:">
             <ul class="nav nav-list">
                 <li class="nav-header">博文管理</li>
-                <li><a href="#">发表文章</a> </li>
-                <li><a href="#">管理文章</a> </li>
-                <li><a href="#">文章分类</a> </li>
+                <li><a href="{{ url_for('admin.submitArticles') }}">发表文章</a> </li>
+                <li><a href="{{ url_for('admin.manage_articles') }}">管理文章</a> </li>
+                <li><a href="{{ url_for('admin.manage_articleTypes') }}">文章分类</a> </li>
                 <li class="nav-header">评论管理</li>
                 <li><a href="#">文章评论</a> </li>
                 <li class="nav-header">博客定制</li>
@@ -47,4 +46,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
 {% endblock %}

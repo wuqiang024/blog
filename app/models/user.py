@@ -2,7 +2,7 @@
 # -*- encoding:utf-8 -*-
 from flask import current_app
 import hashlib
-from itsdangerous import JSONWebSignatureSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
@@ -19,12 +19,24 @@ class User(UserMixin,db.Model):
     email = db.Column(db.String(64),unique=True,nullable=False,index=True)
     username = db.Column(db.String(64),nullable=False)
     password_hash = db.Column(db.String(128),nullable=False)
-    comfirmed = db.Column(db.Boolean,default=False)
+    confirmed = db.Column(db.Boolean,default=False)
     avatar_hash = db.Column(db.String(32),default='')
 
-    def generate_confirmation_token(self,expiration):
-        s = Serializer(current_app.config['SECRET_KEY'],int(expiration))
-        return s.dumps({'comfirm':self.id})
+    def generate_confirmation_token(self,expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'],expiration)
+        return s.dumps({'confirm': self.id })
+
+    def confirm(self,token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
 
     @staticmethod
     def insert_admin(email,username,password):
