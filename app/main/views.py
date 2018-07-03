@@ -3,21 +3,20 @@
 import os
 import random
 from flask import render_template,request,current_app,make_response,url_for
+from flask_login import login_required
 from flask_login import current_user
 import datetime
-from ..models import Article,ArticleType,Source
+from ..models import Article,ArticleType,Source,Menu
 from . import main
-from .. import db,cache
+from .. import db
 
+@main.route('/')
 @main.route('/index')
-@cache.cached(timeout=60)
+# @cache.cached(timeout=60)
 def index():
-    page = request.args.get('page', 1,type=int)
-    pagination = Article.query.order_by(Article.create_time.desc()).paginate(
-        page,10,error_out=False
-    )
-    articles = pagination.items
-    return render_template('index.html',articles=articles,pagination=pagination,endpoint='.index')
+    menus = Menu.query.all()
+    articleTypes = ArticleType.query.all()
+    return render_template('main.html',menus=menus,articleTypes=articleTypes)
 
 @main.route('/article-types/<int:id>/')
 def articleTypes(id):
@@ -29,7 +28,7 @@ def articleTypes(id):
     return render_template('index.html',articles=articles,pagination=pagination,endpoint='.articleTypes',id=id)
 
 @main.route('/article-details/<int:id>',methods=['GET','POST'])
-@cache.cached(timeout=60)
+# @cache.cached(timeout=60)
 def articleDetails(id):
     article = Article.query.get_or_404(id)
     # article.add_view(article,db)
@@ -56,6 +55,7 @@ def gen_rnd_filename():
 
 
 @main.route('/ckupload/', methods=['POST', 'OPTIONS'])
+@login_required
 def ckupload():
     print(current_app.static_folder)
     """CKEditor file upload"""

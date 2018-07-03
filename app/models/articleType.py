@@ -31,3 +31,16 @@ class ArticleType(db.Model):
 
             db.session.commit()
 
+    @property
+    def is_hide(self):
+        if self.setting:
+            return self.setting.hide
+        else:
+            return False
+
+    @property
+    def is_protected(self):
+        if self.setting:
+            return self.setting.protected
+        else:
+            return False

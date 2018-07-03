@@ -16,7 +16,7 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 config = Config()
 mail = Mail()
-cache = Cache()
+# cache = Cache()
 bootstrap = Bootstrap()
 
 def create_app():
@@ -27,7 +27,7 @@ def create_app():
     login_manager.init_app(app)
     bootstrap.init_app(app)
     mail.init_app(app)
-    cache.init_app(app,config={'CACHE_TYPE': 'simple'})
+    # cache.init_app(app,config={'CACHE_TYPE': 'simple'})
     # print(app.config)
 
     # 注册蓝图
