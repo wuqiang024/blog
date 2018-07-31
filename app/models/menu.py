@@ -28,7 +28,7 @@ class Menu(db.Model):
     @staticmethod
     def return_menus():
         menus = [(m.id,m.name) for m in Menu.query.all()]
-        menus.append((-1,u'不选择导航(该分类将单独成一导航'))
+        menus.append((-1,u'不选择导航(该分类将单独成一导航)'))
         return menus
 
     def __repr__(self):

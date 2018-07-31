@@ -13,10 +13,10 @@
     <div>
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="{{ url_for('admin.manage_articleTypes') }}">博文分类</a>
+                <a href="{{ url_for('admin.manageArticleTypes') }}">博文分类</a>
             </li>
             <li>
-                <a href="{{ url_for('admin.manage_articleTypes_nav') }}">分类导航</a>
+                <a href="{{ url_for('admin.manageArticleTypesNav') }}">分类导航</a>
             </li>
         </ul>
 
@@ -64,12 +64,12 @@
                         </td>
                         <td>{{ articleType.articles.count() }}</td>
                         <td>
-                            <a onclick="get_articleType_info('{{ url_for('admin.get_articleType_info',id=articleType.id) }}')">
+                            <a onclick="get_articleType_info('{{ url_for('admin.getArticleTypeInfo',id=articleType.id) }}',{{articleType.id}})">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </a>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-default" onclick="delArticleTypeCfm('{{ url_for('admin.delete_articleType',id=articleType.id,page=page) }}')">
+                            <a class="btn btn-sm btn-default" onclick="delArticleTypeCfm('{{ url_for('admin.deleteArticleType',id=articleType.id,page=page) }}')">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </a>
                         </td>
@@ -131,11 +131,11 @@
                 </button>
                 <h4 class="modal-title" id="ModalTitle"></h4>
             </div>
-            <form id="editArticleTypeForm" method="post" action="{{ url_for('admin.edit_articleType',page=page) }}">
+            <form id="editArticleTypeForm" method="post" action="{{ url_for('admin.editArticleType',page=page) }}">
                 <div class="modal-body">
                     <div class="form-group">
                         {{ form2.csrf_token }}
-                        {{ form2.articleType_id(type='hidden') }}
+                        {{ form2.articleType_id(type='hidden',id='articleType_id') }}
                         {{ form2.name.label }}
                         {{ form2.name(id='editName',class='form-control') }}
                         {{ form2.setting_hide(id='editSetting_hide',class='form-control') }}
@@ -145,11 +145,11 @@
                         {{ form2.menus(id='editMenu',class='form-control') }}
                     </div>
                 </div>
-            </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button id="editArticleTypeCfmClick" type="submit" class="btn btn-success">确定</button>
             </div>
+            </form>
         </div>
     </div>
 </div>

@@ -14,18 +14,23 @@ from .. import db
 @main.route('/index')
 # @cache.cached(timeout=60)
 def index():
-    menus = Menu.query.all()
-    articleTypes = ArticleType.query.all()
-    return render_template('main.html',menus=menus,articleTypes=articleTypes)
+    # menus = Menu.query.all()
+    # articleTypes = ArticleType.query.all()
+    # articleTypeId = ArticleType.query.first().id
+    return render_template('index.html',Menu=Menu,ArticleType=ArticleType,endpoint='.index')
 
 @main.route('/article-types/<int:id>/')
 def articleTypes(id):
     page = request.args.get('page',1,type=int)
+    menus = Menu.query.all()
     pagination = ArticleType.query.get_or_404(id).articles.order_by(Article.create_time.desc()).paginate(
         page,10,error_out=False
     )
     articles = pagination.items
-    return render_template('index.html',articles=articles,pagination=pagination,endpoint='.articleTypes',id=id)
+    return render_template('articleLists.html',articles=articles,
+                           pagination=pagination,
+                           menus=menus,
+                           endpoint='.articleTypes',id=id)
 
 @main.route('/article-details/<int:id>',methods=['GET','POST'])
 # @cache.cached(timeout=60)
@@ -42,7 +47,7 @@ def articleSources(id):
         Article.create_time.desc()).paginate(page,10,error_out=False)
     articles = pagination.items
     return render_template(
-        'index.html',
+        'articleLists.html',
         articles=articles,
         pagination=pagination,
         endpoint='.articleSources',

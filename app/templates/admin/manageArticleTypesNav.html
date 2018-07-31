@@ -17,10 +17,10 @@
     <div>
         <ul class="nav nav-tabs">
             <li class="">
-                <a href="{{ url_for('admin.manage_articleTypes') }}">博文分类</a>
+                <a href="{{ url_for('admin.manageArticleTypes') }}">博文分类</a>
             </li>
             <li class="active">
-                <a href="{{ url_for('admin.manage_articleTypes_nav') }}">导航分类</a>
+                <a href="{{ url_for('admin.manageArticleTypesNav') }}">导航分类</a>
             </li>
         </ul>
         <div id=aritcleTypesNav">
@@ -44,13 +44,13 @@
                         <td>排序</td>
                         <td>
                             <a class="btn"
-                               onclick="get_articleTypeNav_info('{{url_for('admin.get_articleTypeNav_info',id=menu.id)}}')">
+                               onclick="get_articleTypeNav_info('{{url_for('admin.getArticleTypeNavInfo',id=menu.id)}}')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </a>
                         </td>
                         <td>
                             <a href="#" class="btn btn-sm btn-default"
-                               onclick="delArticleTypeNavCfm({{ url_for('admin.delete_nav', id=menu.id, page=page) }})">
+                               onclick="delArticleTypeNavCfm({{ url_for('admin.deleteNav', id=menu.id, page=page) }})">
                                 删除</a>
                         </td>
                     </tr>
@@ -79,7 +79,7 @@
                 <h4 class="modal-title">添加分类导航 </h4>
             </div>
             <form id="addArticleTypeNavForm" method="post"
-                  action="{{ url_for('admin.manage_articleTypes_nav',page=page) }}">
+                  action="{{ url_for('admin.manageArticleTypesNav',page=page) }}">
                 <div class="modal-body">
                     <div class="form-group">
                         {{ form.csrf_token }}
@@ -106,7 +106,7 @@
                 <h4 class="modal-title" id="NavModalTitle"></h4>
             </div>
             <form id="editAritcleTypeNavForm" method="post"
-                  action="{{ url_for('admin.edit_nav',page=page) }}">
+                  action="{{ url_for('admin.editNav',page=page) }}">
                 <div class="modal-body">
                     <div class="form-group">
                         {{ form2.csrf_token }}

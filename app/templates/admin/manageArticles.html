@@ -40,7 +40,7 @@
 
     <div class="col-sm-12">
         <form class="delete-articles" id="delArticlesForm" method="post"
-        action="{{ url_for('admin.delete_articles',types_id=types_id,source_id=source_id,
+        action="{{ url_for('admin.deleteArticles',types_id=types_id,source_id=source_id,
         page=page)}}">
             {{ form3.csrf_token }}
             {{ form3.articleIds(type='hidden',value='') }}
@@ -77,7 +77,7 @@
                     </td>
                     <td>
                         <form id="delForm{{article.id}}" method="post"
-                              action="{{ url_for('admin.delete_article',source_id=source_id,types_id=types_id,
+                              action="{{ url_for('admin.deleteArticle',source_id=source_id,types_id=types_id,
                               page=page) }}">
                             {{ form2.csrf_token }}
                             {{ form2.articleId(type='hidden',value=article.id) }}
