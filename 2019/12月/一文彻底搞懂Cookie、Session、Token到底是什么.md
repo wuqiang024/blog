@@ -11,4 +11,4 @@ HTTP是无状态的web通信服务器协议，什么是无状态呢？就是一�
 
 如下图所示：
 
-![https://user-gold-cdn.xitu.io/2019/12/2/16ec5a45ba0ba9f6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1](https://user-gold-cdn.xitu.io/2019/12/2/16ec5a45ba0ba9f6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+![](https://user-gold-cdn.xitu.io/2019/12/2/16ec5a45ba0ba9f6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
