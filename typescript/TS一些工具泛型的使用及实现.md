@@ -26,18 +26,18 @@ type obj = {
 keyof 产生联合类型，in则可遍历枚举类型，所以他们经常一起使用，看下Partial源码
 
 ```js
-type Partial<T> = { [P in keyof T]?: T[P] };
+type Partial<T> = { [P in keyof T] ?: T[P] };
 ```
 
 上面语句的意思是`keyof T`拿到T所有属性名，然后in进行遍历，将值赋给P，最后T[P]取得相应属性的值，结合中间的？我们就明白了Partial的含义了。
 
 ## Required
 Required是将传入的属性变为必选项，源码如下
-`type Required<T> = { [P in keyof T]-?: T[P] }`
+`type Required<T> = { [P in keyof T] -?: T[P] }`
 我们发现一个有意思的用法`-?`，这里很好理解就是将可选项代表的`?`去掉，从而让这个类型变成必选项，与之对应的还有个`+?`，这个含义自然与`-?`之前相反，他是用来把属性变成可选项的。
 
 ## Mutable(未包含)
-类似地，其实还有对`+`和`-`，这里要说的不是变量之间的进行加减而是对`reaeonly`进行加减。
+类似地，其实还有对`+`和`-`，这里要说的不是变量之间的进行加减而是对`readonly`进行加减。
 以下代码的作用就是将T的所有属性的readonly移除，你也可以写一个相反的出来。
 
 ```js
