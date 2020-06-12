@@ -93,3 +93,25 @@ default-character-set=utf8默认字符集为utf8
 mysql >>> show variables like '%char%';
 ```
 此数据库就可以愉快的使用了。
+
+# Mac的mysql无法启动的原因
+## 一、由于Mac OS X的升级或其他原因可能会导致一个错误:
+`Warning:The /usr/local/mysql/data directory is not owned by the 'mysql' or '_mysql'`
+原因是某种情况下导致`/usr/local/mysql/data`的拥有者发生了改变，所以只要将其拥有者修改为'mysql'就可以了。
+`sudo chown -R mysql /usr/local/mysql/data `
+
+## 二、wheel是什么，引用网上的一段描述如下:
+在linux中wheel组就类似于一个管理员的组。
+通常在linux下，即使我们有系统管理员root的权限，也不推荐用root用户登录。一般情况下用普通用户登录就可以了，在需要root权限执行一些操作时，再su登录为root用户。但是，任何人只要知道了root密码，都可以通过su命令来登录为root用户。这无疑为系统带来了安全隐患。所以，将普通用户加入到wheel组，被加入的这个普通用户就成了管理员组内的用户，但如果不对一些相关的配置文件进行配置，这个管理员组内的用户与普通用户也就没什么区别。就像警察下班后，没有带枪，穿着便衣和普通人一样，虽然他的的确确是警察。
+根据应用的实例不同应用wheel组的方法也不同，这里对于服务器来说，我们希望的是剥夺被加入到wheel组用户以外的普通用户通过su命令来登录为root的机会(只有属于wheel组的用户才可以su登录为root)。这样就进一步增强了系统的安全性。
+
+## 三、查看用户组命令
+cat /ect/group | grep [group_name]
+
+# 如果mysql启动不成功，还可能是存在mysql进程
+通过`ps -ef | grep mysqld`来查看系统中的mysql进程，然后通过`kill -9 进程ID`来杀掉进程。
+
+`注意的点:`
+一、安装的时候最后生成的密码一定要保存好
+二、启动的时候报错，记得要执行sudo chown -R mysql:mysql /usr/local/mysql/data/* 或者 sudo chown -R mysql /usr/loca/mysql/data
+三、配置环境变量的时候，不要去修改别的地方，否则可能会导致别的应用程序启动失败。
