@@ -95,7 +95,7 @@ car.name; // undefined
 ```js
 function create() {
     var obj = new Object();
-    Con = [].shift.cal(arguments);
+    Con = [].shift.call(arguments);
     obj.__proto__ = Con.prototype;
     var ret = Con.apply(obj, arguments);
     return typeof ret === 'object' ? ret : obj;
