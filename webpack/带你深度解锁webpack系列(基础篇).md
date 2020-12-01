@@ -44,7 +44,7 @@ const dog = new Animal('dog');
 
 可以看到项目下多了一个dist目录，里面有一个打包出来的文件main.js。
 
-webpack有一个默认的配置，如默认的入口文件时`./scr`，默认打包到`dist/main.js`。更多的默认配置可以查看:`node_modules/webpack/lib/WebpackOptionsDefaulter.js`。
+webpack有一个默认的配置，如默认的入口文件时`./src`，默认打包到`dist/main.js`。更多的默认配置可以查看:`node_modules/webpack/lib/WebpackOptionsDefaulter.js`。
 
 查看`dist/main.js`文件，可以看到，`src/index.js`并没有被转译成低版本的代码，这显然不是我们想要的。
 
@@ -341,7 +341,7 @@ devtool中的一些设置，可以帮助我们将编译后的代码映射回原�
 webpack不能直接处理css，需要借助loader,如果是`.css`，我们需要的loader有: style-loader,css-loader，考虑到兼容性问题，还需要postcss-loader,而如果是less或sass，还需要less-loader或sass-loader。
 
 ```js
-npm install style-loader css-loader post-css-loader autoprefixer sass-loader node-sass -D
+npm install style-loader css-loader postcss-loader autoprefixer sass-loader node-sass -D
 ```
 
 ```js
