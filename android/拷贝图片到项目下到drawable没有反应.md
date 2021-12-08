@@ -1,0 +1,1 @@
+# 把图片拷贝到drawable和mipmap目录下

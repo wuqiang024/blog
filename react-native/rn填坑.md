@@ -1,5 +1,23 @@
 # RN填坑记录
 
+### Q: mac adb命令报错“zsh: command not found: adb” 及配置 .zshrc
+A: 解决方案: 打开`/Users/wuqiang/`或者`~/`下面的`.bash_profile`文件，将下面两行代码加上去,然后执行`source ~/.bash_profile`即可执行`adb devices`命令
+```
+export ANDROID_HOME=/Users/wuqiang/Library/Android/sdk
+export PATH=${PATH}:${ANDROID_HOME}/platform-tools
+```
+
+
+### Q: zsh: command not found: brew解决方法
+A: 参考链接: https://blog.csdn.net/wangyun71/article/details/108560873
+A: 解决方案: mac 安装homebrew，
+
+用以下命令安装，序列号选择中科大（1）的
+
+/bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+
+最后重启终端或者运行`source /Users/wuqiang/.zprofile`，否则无法使用
+
 ### Q: 安装Homebrew，官网链接被墙了
 A: 参考链接：https://www.cnblogs.com/xibushijie/p/13335988.html
 

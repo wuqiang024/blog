@@ -55,3 +55,19 @@ toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 })
 toolbar.setLogo(R.mipmap.ic_launcher);
 ```
+
+还有一种方法是如下：
+
+```java
+setSupportActionBar(toolbar)
+supportActionBar?.let {
+  it.setDisplayHomeAsUpEnabled(true)
+  it.setHomeAsUpIndicator(R.drawable.ic_menu)
+}
+
+override fun onOptionsItemSelected(item: MenuItem) : Boolean {
+  when(item.itemId) {
+    android.R.id.home -> do something
+  }
+}
+```
