@@ -1,12 +1,51 @@
+<!--
+ * @Author: wuqiang
+ * @Date: 2022-03-09 10:08:10
+ * @LastEditors: wuqiang
+ * @LastEditTime: 2022-06-12 00:51:03
+-->
 社区有n、nvm、nvs三种方法来对Node.js的版本进行管理，使用起来也很方便，因此称为3N。
 
 # 前言
 Node.js是支持跨平台的，Linux、Unix、MacOS等主流一操作系统都是支持的，但是推荐大家使用Linux或者MacOS平台，一方面我们的代码将来投入到生产环境也是基于Linux的，另一方面Windows总是产生一切奇怪的问题。Window环境可以自己搭建一个虚拟机。
 
+# 切换bash
+切换到bash
+```
+chsh -s /bin/bash
+```
+切换到zsh
+```
+chsh -s /bin/zsh
+```
+
 # nvm
+https://blog.csdn.net/zm_miner/article/details/122449762?spm=1001.2014.3001.5502
+
+## 通过curl安装
 Github地址https://github.com/nvm-sh/nvm
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+```
+
+如果安装失败，打开网站: https://www.ipaddress.com/
+查询一下 raw.githubusercontent.com对应的IP 地址
+再修改/etc/hosts文件，加上其中一个ip地址
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+## 通过wget安装
+```
+brew install libunistring
+brew install openssl@1.1
+brew install wget
+
+重点：报错提示缺少啥，就安装啥，最后就安装成功
+```
 安装步骤:
-* 安装nvm: wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+* 安装nvm: wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 * 查看所有Node.js版本: nvm ls-remote
 * 查看本地Node.js版本: nmv ls
 * 安装Node.js: nvm install v6.9.5
